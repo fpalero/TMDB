@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- A CardView that contains a TextView -->
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/movie_card_margin"
+
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="3dp">
+
+    <RelativeLayout
+        android:paddingTop="@dimen/movie_card_padding"
+        android:paddingBottom="@dimen/movie_card_padding"
+        android:paddingRight="@dimen/movie_card_padding_side"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_margin="@dimen/movie_poster_top_margin"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:src="@mipmap/ic_launcher"
+            android:layout_alignParentLeft="true"
+            />
+
+
+    <LinearLayout
+        android:id="@+id/description"
+        android:layout_toRightOf="@id/poster"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/movie_title_bottom_margin"
+            android:layout_marginTop="@dimen/movie_title_top_margin"
+            android:text="Salvados por la campana" />
+
+        <TextView
+            android:id="@+id/year"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/movie_year_bottom_margin"
+            android:layout_marginTop="@dimen/movie_year_top_margin"
+            android:text="1986" />
+
+        <TextView
+            android:id="@+id/overview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/movie_overview_bottom_margin"
+            android:layout_marginTop="@dimen/movie_overview_top_margin"
+            android:text="Salvados por la campana Salvados por la campana Salvados por la campana Salvados por la campana Salvados por la campana Salvados por la campana Salvados por la campana Salvados por la campana " />
+
+
+    </LinearLayout>
+
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

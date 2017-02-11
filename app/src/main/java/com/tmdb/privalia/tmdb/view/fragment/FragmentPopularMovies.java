@@ -6,29 +6,24 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tmdb.privalia.tmdb.BuildConfig;
 import com.tmdb.privalia.tmdb.R;
 import com.tmdb.privalia.tmdb.presenter.PageMoviesPresenter;
-import com.tmdb.privalia.tmdb.view.fragment.dummy.DummyContent;
-import com.tmdb.privalia.tmdb.view.fragment.dummy.DummyContent.DummyItem;
 import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
 import com.tmdb.privalia.tmdb.presenter.adapters.*;
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interfaces.
- */
+
 public class FragmentPopularMovies extends Fragment implements IListPopularMovies{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    //private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
 
     //Clases capa Presenter
@@ -37,7 +32,7 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
     public EndlessScrollListener endlessScrollListener = new EndlessScrollListener() {
         @Override
         public void onLoadMore(int page, int totalItemsCount) {
-            pageMoviesPresenter.updateAdapter();
+            pageMoviesPresenter.updateAdapter(page);
         }
     };
 
@@ -78,14 +73,16 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+            /*if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
+            }*/
+
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(BuildConfig.LIST_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
 
             // Initialize the movie adapter
-            adapterPopularMovies = new AdapterPopularMovies(DummyContent.ITEMS, mListener);
+            adapterPopularMovies = new AdapterPopularMovies();
             recyclerView.setAdapter(adapterPopularMovies);
             endlessScrollListener.setLayoutManager(recyclerView.getLayoutManager());
             recyclerView.addOnScrollListener(endlessScrollListener);
@@ -94,7 +91,7 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
         // This snippet of code links thi class with the presentar layer,
         // which updates the list of movies
         this.pageMoviesPresenter = new PageMoviesPresenter(this);
-        this.pageMoviesPresenter.updateAdapter();
+        this.pageMoviesPresenter.updateAdapter(1);
         return view;
     }
 
@@ -102,9 +99,9 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
+        /*if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
-        }/* else {
+        } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }*/
@@ -113,7 +110,7 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        //mListener = null;
     }
 
     @Override
@@ -127,8 +124,8 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
     }
 
 
-    public interface OnListFragmentInteractionListener {
+   /* public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(DummyItem item);
-    }
+    }*/
 }

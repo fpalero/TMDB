@@ -2,6 +2,7 @@ package com.tmdb.privalia.tmdb.presenter.adapters;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 /**
  * Created by fernando on 2/10/17.
@@ -10,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 public abstract class EndlessScrollListener extends RecyclerView.OnScrollListener {
     private final int VISIBLE_THRESHOLD = 3;
     private RecyclerView.LayoutManager mLayoutManager;
-    private int currentPage = 0;
+    private int currentPage = 1;
     private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
     private boolean loading = true;
 
@@ -27,7 +28,8 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     {
         totalItemCount = mLayoutManager.getItemCount();
         visibleItemCount = mLayoutManager.getChildCount();
-        firstVisibleItem = ((LinearLayoutManager)mLayoutManager).findFirstVisibleItemPosition();
+
+        firstVisibleItem = ((StaggeredGridLayoutManager)mLayoutManager).findFirstVisibleItemPositions(null)[0];
 
         if (loading) {
             if (totalItemCount > previousTotal) {

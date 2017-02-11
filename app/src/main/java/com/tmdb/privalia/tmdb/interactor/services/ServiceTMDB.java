@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by fernando on 2/9/17.
  */
 
-public class TMDBCall {
+public class ServiceTMDB {
     private static Retrofit retrofit;
     private static tmdbAPI api;
 

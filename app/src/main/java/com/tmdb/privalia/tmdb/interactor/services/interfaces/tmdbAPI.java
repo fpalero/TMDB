@@ -2,7 +2,7 @@ package com.tmdb.privalia.tmdb.interactor.services.interfaces;
 
 
 import com.tmdb.privalia.tmdb.BuildConfig;
-import com.tmdb.privalia.tmdb.interactor.model.MoviePage;
+import com.tmdb.privalia.tmdb.interactor.model.PageMovies;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,6 +16,6 @@ import retrofit2.http.Query;
 public interface tmdbAPI {
     @Headers("Content-Type: application/json;charset=utf-8")
     @GET("movie/popular?api_key="+ BuildConfig.TMDB_KEY )
-    Call<MoviePage> getPopularMovies(@Query("page") Integer page);
+    Call<PageMovies> getPopularMovies(@Query("page") Integer page);
 
 }
