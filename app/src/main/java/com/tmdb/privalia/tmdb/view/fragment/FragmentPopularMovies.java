@@ -71,13 +71,9 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
 
         // Set the adapter
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
+
             recyclerView = (RecyclerView) view;
-            /*if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }*/
+
 
             recyclerView.setLayoutManager(new StaggeredGridLayoutManager(BuildConfig.LIST_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
 
@@ -91,7 +87,7 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
         // This snippet of code links thi class with the presentar layer,
         // which updates the list of movies
         this.pageMoviesPresenter = new PageMoviesPresenter(this);
-        this.pageMoviesPresenter.updateAdapter(1);
+        this.pageMoviesPresenter.loadData();
         return view;
     }
 

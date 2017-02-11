@@ -12,7 +12,7 @@ public class ApplicationTMDB extends Application {
 
     private static ApplicationTMDB singleton;
     private static Context context;
-
+    private static com.tmdb.privalia.tmdb.interactor.model.Configuration configuration;
     public static ApplicationTMDB getInstance(){
         return singleton;
     }
@@ -29,7 +29,6 @@ public class ApplicationTMDB extends Application {
         super.onConfigurationChanged(newConfig);
     }
 
-
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -44,4 +43,11 @@ public class ApplicationTMDB extends Application {
         return context;
     }
 
+    public void setTMDBConfig(com.tmdb.privalia.tmdb.interactor.model.Configuration _confiuration){
+        configuration = _confiuration;
+    }
+
+    public com.tmdb.privalia.tmdb.interactor.model.Configuration getTMDBConfig(){
+        return configuration;
+    }
 }

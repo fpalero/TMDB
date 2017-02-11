@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.tmdb.privalia.tmdb.ApplicationTMDB;
 import com.tmdb.privalia.tmdb.R;
+import com.tmdb.privalia.tmdb.interactor.model.Configuration;
+import com.tmdb.privalia.tmdb.interactor.model.Images;
 import com.tmdb.privalia.tmdb.interactor.model.Movie;
 //import com.tmdb.privalia.tmdb.presenter.adapters.AdapterPopularMovies;
 import com.tmdb.privalia.tmdb.presenter.interfaces.AViewHolderFillData;
@@ -40,9 +42,14 @@ public class MovieHolder extends AViewHolderFillData<Movie> {
         this.year.setText(_movie.getRelease_date());
         this.overview.setText(_movie.getOverview());
         Glide.with(ApplicationTMDB.getInstance().getContext())
-                .load(_movie.getPoster_path())
+                .load(getPicPath(_movie.getPoster_path()))
                 .into(poster);
         return this;
+    }
+
+    private String  getPicPath(String _path){
+        Images images = ApplicationTMDB.getInstance().getTMDBConfig().getImages();
+        return images.getBase_url() + images.getLogo_sizes().get(images.getLogo_sizes().size()-1) + _path;
     }
 
 }
