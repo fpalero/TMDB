@@ -17,14 +17,4 @@ public class ConfigurationInteractor extends AInteractor<Configuration>{
         callPage.enqueue(this);
     }
 
-    public Configuration getConfiguration() {
-
-        callPage = ServiceTMDB.getInstace().getConfiguration();
-        try {
-            return callPage.execute().body();
-        } catch (IOException e) {
-            return null;
-        }
-
-    }
 }

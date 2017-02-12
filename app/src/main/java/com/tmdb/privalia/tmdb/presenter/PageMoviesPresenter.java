@@ -21,7 +21,6 @@ public class PageMoviesPresenter {
     private IListPopularMovies iListPopularMovies;
     private PageMovieInteractor pageMoviesInteractor;
 
-    private LoadInitData initData;
     private AInteractor.InteractorResponse iResponse;
 
     public PageMoviesPresenter(IListPopularMovies _iListPopularMovies) {
@@ -42,16 +41,11 @@ public class PageMoviesPresenter {
         };
     }
 
-    public void loadData(){
-        initData = new LoadInitData(pageMoviesInteractor, this);
-        initData.execute();
-    }
-
     public void updateAdapter(int _page){
         this.pageMoviesInteractor.getMovies(_page, iResponse);
     }
 
-    public void updateMoviesList(PageMovies _pageMovies){
+    private void updateMoviesList(PageMovies _pageMovies){
         ((AdapterPopularMovies)iListPopularMovies.getListAdapter()).updateListMovies(_pageMovies.getListMovies());
     }
 

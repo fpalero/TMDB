@@ -21,6 +21,7 @@ public class AdapterPopularMovies extends RecyclerView.Adapter<MovieHolder> {
     public AdapterPopularMovies(/*OnListFragmentInteractionListener listener*/) {
         mValues = new ArrayList<>();
        // mListener = listener;
+
     }
 
     @Override

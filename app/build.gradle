@@ -15,7 +15,6 @@ android {
         buildConfigField "String", "TMDB_KEY", "\"93aea0c77bc168d8bbce3918cefefa45\""
         buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
 
-        buildConfigField "Integer", "LIST_COLUMNS", "1"
     }
     buildTypes {
         release {
@@ -30,6 +29,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:support-v4:25.1.1'
     compile 'com.android.support:recyclerview-v7:25.1.1'
@@ -42,4 +42,7 @@ dependencies {
 
     //Glide
     compile 'com.github.bumptech.glide:glide:3.5.2'
+
+    //Animations
+    compile 'com.wang.avi:library:2.1.3'
 }

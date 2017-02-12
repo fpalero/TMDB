@@ -12,6 +12,8 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     private final int VISIBLE_THRESHOLD = 3;
     private RecyclerView.LayoutManager mLayoutManager;
     private int currentPage = 1;
+    public int posX;
+    public int posY;
     private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
     private boolean loading = true;
 
@@ -26,6 +28,8 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy)
     {
+        posX = dx;
+        posY = dy;
         totalItemCount = mLayoutManager.getItemCount();
         visibleItemCount = mLayoutManager.getChildCount();
 
@@ -46,6 +50,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
             loading = true;
             onLoadMore(currentPage, totalItemCount);
         }
+
     }
 
     // Defines the process for actually loading more data based on page
@@ -53,4 +58,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     public abstract void onLoadMore(int page, int totalItemsCount);
 
 
+    public int getCurrentPage(){return currentPage;}
+
+    public int getFirstVisibleItem(){return firstVisibleItem;}
 }

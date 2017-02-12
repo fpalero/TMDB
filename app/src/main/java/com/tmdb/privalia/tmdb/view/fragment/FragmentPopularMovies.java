@@ -3,21 +3,18 @@ package com.tmdb.privalia.tmdb.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tmdb.privalia.tmdb.BuildConfig;
 import com.tmdb.privalia.tmdb.R;
 import com.tmdb.privalia.tmdb.presenter.PageMoviesPresenter;
 import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
 import com.tmdb.privalia.tmdb.presenter.adapters.*;
 
-public class FragmentPopularMovies extends Fragment implements IListPopularMovies{
+public class FragmentPopularMovies extends Fragment implements IListPopularMovies {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -25,6 +22,8 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
     private int mColumnCount = 1;
     //private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
+
+    private StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     //Clases capa Presenter
     private PageMoviesPresenter pageMoviesPresenter;
@@ -38,30 +37,11 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
 
     //Fin Clases capa Presenter
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public FragmentPopularMovies() {
-    }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static FragmentPopularMovies newInstance(int columnCount) {
+    public static FragmentPopularMovies newInstance() {
         FragmentPopularMovies fragment = new FragmentPopularMovies();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
+
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -74,20 +54,30 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
 
             recyclerView = (RecyclerView) view;
 
+           // getContext().getResources().getConfiguration().orientation;
+            staggeredGridLayoutManager = new StaggeredGridLayoutManager(
+                    getContext().getResources().getInteger(R.integer.num_columns),
+                    StaggeredGridLayoutManager.VERTICAL);
 
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(BuildConfig.LIST_COLUMNS, StaggeredGridLayoutManager.VERTICAL));
+            if (savedInstanceState != null) {
+
+            }
+
+            recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
             // Initialize the movie adapter
             adapterPopularMovies = new AdapterPopularMovies();
             recyclerView.setAdapter(adapterPopularMovies);
             endlessScrollListener.setLayoutManager(recyclerView.getLayoutManager());
             recyclerView.addOnScrollListener(endlessScrollListener);
-        }
 
-        // This snippet of code links thi class with the presentar layer,
-        // which updates the list of movies
-        this.pageMoviesPresenter = new PageMoviesPresenter(this);
-        this.pageMoviesPresenter.loadData();
+            this.pageMoviesPresenter = new PageMoviesPresenter(this);
+
+
+            this.pageMoviesPresenter.updateAdapter(1);
+
+        }
+        
         return view;
     }
 
@@ -120,8 +110,5 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
     }
 
 
-   /* public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
-    }*/
+
 }
