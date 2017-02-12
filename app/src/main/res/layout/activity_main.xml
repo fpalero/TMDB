@@ -21,7 +21,16 @@
         android:elevation="4dp"
         app:titleTextColor="@android:color/background_light"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="100dp"
+            android:padding="0dp"
+            android:prompt="@string/keyword_prompt"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/container_main"

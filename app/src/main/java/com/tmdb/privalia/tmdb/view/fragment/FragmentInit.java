@@ -13,6 +13,8 @@ import com.tmdb.privalia.tmdb.presenter.LoadInitDataPresenter;
 import com.tmdb.privalia.tmdb.presenter.interfaces.ILoadConfiguration;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -74,14 +76,14 @@ public class FragmentInit extends Fragment implements ILoadConfiguration{
     }
 
     @Override
-    public void endLoadConfiguration() {
+    public void endLoadConfiguration(ArrayList<String> _keywords) {
         if(mListener != null)
-            mListener.onFragmentInteraction();
+            mListener.onFragmentInteraction(_keywords);
     }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction();
+        void onFragmentInteraction(ArrayList<String> keywords);
     }
 
 
