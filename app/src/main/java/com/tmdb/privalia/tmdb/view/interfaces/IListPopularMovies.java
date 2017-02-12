@@ -11,4 +11,5 @@ public interface IListPopularMovies {
 
     void setListAdapter(RecyclerView.Adapter adapter);
     RecyclerView.Adapter getListAdapter();
+    RecyclerView getRecyclerView();
 }

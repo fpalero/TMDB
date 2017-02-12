@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AdapterPopularMovies extends RecyclerView.Adapter<MovieHolder> {
 
-    private final List<Movie> mValues;
+    public final List<Movie> mValues;
     //private final OnListFragmentInteractionListener mListener;
 
     public AdapterPopularMovies(/*OnListFragmentInteractionListener listener*/) {

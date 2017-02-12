@@ -49,4 +49,6 @@ public class PageMoviesPresenter {
         ((AdapterPopularMovies)iListPopularMovies.getListAdapter()).updateListMovies(_pageMovies.getListMovies());
     }
 
+
+
 }

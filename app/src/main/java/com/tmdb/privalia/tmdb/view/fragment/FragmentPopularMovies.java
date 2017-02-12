@@ -18,8 +18,8 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String FIRST_VISIBLE_ITEM = "first visible element";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
     //private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
 
@@ -45,39 +45,52 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_item_list, container, false);
-
-        // Set the adapter
         if (view instanceof RecyclerView) {
 
             recyclerView = (RecyclerView) view;
-
-           // getContext().getResources().getConfiguration().orientation;
+            // Set the adapter
             staggeredGridLayoutManager = new StaggeredGridLayoutManager(
                     getContext().getResources().getInteger(R.integer.num_columns),
                     StaggeredGridLayoutManager.VERTICAL);
 
-            if (savedInstanceState != null) {
-
-            }
-
             recyclerView.setLayoutManager(staggeredGridLayoutManager);
+            recyclerView.setAdapter(null);
 
-            // Initialize the movie adapter
-            adapterPopularMovies = new AdapterPopularMovies();
-            recyclerView.setAdapter(adapterPopularMovies);
             endlessScrollListener.setLayoutManager(recyclerView.getLayoutManager());
             recyclerView.addOnScrollListener(endlessScrollListener);
 
-            this.pageMoviesPresenter = new PageMoviesPresenter(this);
+            if (savedInstanceState == null) {
+
+                // Initialize the movie adapter
+                adapterPopularMovies = new AdapterPopularMovies();
+                recyclerView.setAdapter(adapterPopularMovies);
 
 
-            this.pageMoviesPresenter.updateAdapter(1);
+                this.pageMoviesPresenter = new PageMoviesPresenter(this);
+                this.pageMoviesPresenter.updateAdapter(1);
+
+            } else {
+
+                recyclerView.setAdapter(adapterPopularMovies);
+
+                adapterPopularMovies.notifyDataSetChanged();
+                recyclerView.scrollToPosition(savedInstanceState.getInt(FIRST_VISIBLE_ITEM,0));
+
+            }
+
 
         }
-        
         return view;
     }
 
@@ -109,6 +122,16 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
         return this.adapterPopularMovies;
     }
 
+    @Override
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(FIRST_VISIBLE_ITEM, endlessScrollListener.getFirstVisibleItem());
+    }
 
 
 }
