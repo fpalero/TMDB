@@ -52,4 +52,12 @@ public class AdapterPopularMovies extends RecyclerView.Adapter<MovieHolder> {
         notifyDataSetChanged();
 
     }
+
+    public void resetListMovies(List<Movie> _mValues) {
+        int curSize = this.getItemCount();
+        mValues.clear();
+        mValues.addAll(_mValues);
+        notifyDataSetChanged();
+
+    }
 }

@@ -10,34 +10,34 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tmdb.privalia.tmdb.R;
-import com.tmdb.privalia.tmdb.presenter.PageMoviesPresenter;
+import com.tmdb.privalia.tmdb.presenter.SearchMoviesPresenter;
 import com.tmdb.privalia.tmdb.presenter.adapters.AdapterPopularMovies;
 import com.tmdb.privalia.tmdb.presenter.adapters.EndlessScrollListener;
 import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
 
-public class FragmentPopularMovies extends Fragment implements IListPopularMovies {
+public class FragmentSearchMovies extends Fragment implements IListPopularMovies {
 
     // TODO: Customize parameter argument names
     private static final String FIRST_VISIBLE_ITEM = "first visible element";
     // TODO: Customize parameters
     //private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
-
+    String query;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     //Clases capa Presenter
-    private PageMoviesPresenter pageMoviesPresenter;
+    private SearchMoviesPresenter searchMoviesPresenter;
     private AdapterPopularMovies adapterPopularMovies;
 
     public EndlessScrollListener endlessScrollListener = new EndlessScrollListener() {
         @Override
         public void onLoadMore(int page, int totalItemsCount) {
-            pageMoviesPresenter.updateAdapter(page);
+            searchMoviesPresenter.updateAdapter(page, query);
         }
     };
 
-    public static FragmentPopularMovies newInstance() {
-        FragmentPopularMovies fragment = new FragmentPopularMovies();
+    public static FragmentSearchMovies newInstance() {
+        FragmentSearchMovies fragment = new FragmentSearchMovies();
 
         return fragment;
     }
@@ -75,8 +75,8 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
                 recyclerView.setAdapter(adapterPopularMovies);
 
 
-                this.pageMoviesPresenter = new PageMoviesPresenter(this);
-                this.pageMoviesPresenter.updateAdapter(1);
+                this.searchMoviesPresenter = new SearchMoviesPresenter(this);
+               // this.pageMoviesPresenter.updateAdapter(1);
 
             } else {
 
@@ -130,5 +130,8 @@ public class FragmentPopularMovies extends Fragment implements IListPopularMovie
         outState.putInt(FIRST_VISIBLE_ITEM, endlessScrollListener.getFirstVisibleItem());
     }
 
+    public void makeQuery(String _query){
+        searchMoviesPresenter.resetAdapter(1, _query);
+    }
 
 }

@@ -12,6 +12,7 @@
         android:id="@+id/fab_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_search"
         android:layout_margin="10dp"
         app:layout_anchor="@+id/collapsing_toolbar_layout"
         app:layout_anchorGravity="bottom|right|end" />

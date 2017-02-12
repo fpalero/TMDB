@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.tmdb.privalia.tmdb.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ public class KeywordAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.keyword_item, parent, false);
         }
         // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.keyword);
+        TextView tvName = (TextView) convertView.findViewById(R.id.text_keyword);
         // Populate the data into the template view using the data object
         tvName.setText(keyword);
         // Return the completed view to render on screen

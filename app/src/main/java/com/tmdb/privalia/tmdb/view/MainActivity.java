@@ -1,38 +1,79 @@
 package com.tmdb.privalia.tmdb.view;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.AutoCompleteTextView;
 
 import com.tmdb.privalia.tmdb.R;
+import com.tmdb.privalia.tmdb.interactor.model.Keyword;
+import com.tmdb.privalia.tmdb.presenter.KeywordsPresenter;
 import com.tmdb.privalia.tmdb.presenter.LoadInitDataPresenter;
 import com.tmdb.privalia.tmdb.presenter.adapters.KeywordAdapter;
-import com.tmdb.privalia.tmdb.view.fragment.FragmentPopularMovies;
+import com.tmdb.privalia.tmdb.presenter.adapters.KeywordsAdapter;
+import com.tmdb.privalia.tmdb.presenter.interfaces.ILoadKeywords;
 import com.tmdb.privalia.tmdb.view.fragment.FragmentInit;
+import com.tmdb.privalia.tmdb.view.fragment.FragmentPopularMovies;
+import com.tmdb.privalia.tmdb.view.fragment.FragmentSearchMovies;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements FragmentInit.OnFragmentInteractionListener, SearchView.OnQueryTextListener {
+public class MainActivity extends AppCompatActivity implements FragmentInit.OnFragmentInteractionListener, ILoadKeywords<Keyword> /*, SearchView.OnQueryTextListener */{
     private boolean expandable = true;
-    private SearchView searchView;
+  //  private SearchView searchView;
     private LoadInitDataPresenter loadInitDataPresenter;
+    private KeywordsPresenter keywordsPresenter;
     private AppBarLayout appBarLayout;
     private FloatingActionButton fabSearch;
+    private FragmentSearchMovies fragmentSearchMovies = null;
+    private View.OnClickListener fabListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            appBarLayout.setExpanded(expandable);
+            expandable=!expandable;
+            fragmentSearchMovies = FragmentSearchMovies.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+            fragmentTransaction.replace(R.id.container_main, fragmentSearchMovies);
+            fragmentTransaction.addToBackStack("SearchFragment");
+            fragmentTransaction.commit();
+
+        }
+    };
+
+    TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+           // keywordsPresenter.updateAdapter(charSequence.toString());
+            fragmentSearchMovies.makeQuery(charSequence.toString());
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
+
+    AutoCompleteTextView editQuery;
+    KeywordsAdapter autoCompleteAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +82,16 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
         fabSearch = ( FloatingActionButton)findViewById(R.id.fab_search);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbarlayout);
         appBarLayout.setVisibility(View.GONE);
+
+        editQuery = (AutoCompleteTextView) findViewById(R.id.edittext_query);
+
+        autoCompleteAdapter = new KeywordsAdapter(this,
+                new ArrayList<Keyword>());
+
+        editQuery.setAdapter(autoCompleteAdapter);
+
+        editQuery.addTextChangedListener(textWatcher);
+
         fabSearch.setVisibility(View.GONE);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.tmdb_toolbar);
 
@@ -48,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().collapseActionView();
 
+        keywordsPresenter = new KeywordsPresenter(this);
 
 
         boolean showLoading = true;
@@ -66,13 +118,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
 
         }
 
-        fabSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appBarLayout.setExpanded(expandable, true);
-                expandable=!expandable;
-            }
-        });
+        fabSearch.setOnClickListener(fabListener);
 
     }
 
@@ -103,11 +149,16 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
         changeFrament(FragmentPopularMovies.newInstance());
     }
 
+    @Override
+    public ArrayAdapter<Keyword> getAdapter() {
+        return autoCompleteAdapter;
+    }
+
 
     /////////////////////////////
     // SEARCHABLE CODE
 
-    @Override
+ /*   @Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
 
@@ -138,5 +189,5 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
-    }
+    }*/
 }

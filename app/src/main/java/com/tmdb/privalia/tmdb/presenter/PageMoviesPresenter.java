@@ -1,11 +1,5 @@
 package com.tmdb.privalia.tmdb.presenter;
 
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.HandlerThread;
-
-import com.tmdb.privalia.tmdb.ApplicationTMDB;
-import com.tmdb.privalia.tmdb.interactor.ConfigurationInteractor;
 import com.tmdb.privalia.tmdb.interactor.PageMovieInteractor;
 import com.tmdb.privalia.tmdb.interactor.interfaces.AInteractor;
 import com.tmdb.privalia.tmdb.interactor.model.PageMovies;
@@ -41,7 +35,7 @@ public class PageMoviesPresenter {
         };
     }
 
-    public void updateAdapter(int _page){
+    public void updateAdapter(Integer _page){
         this.pageMoviesInteractor.getMovies(_page, iResponse);
     }
 

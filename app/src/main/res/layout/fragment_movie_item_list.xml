@@ -7,5 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
+    android:background="#3c000000"
     tools:context="com.tmdb.privalia.tmdb.view.fragment.FragmentPopularMovies"
     tools:listitem="@layout/fragment_movie_card" />

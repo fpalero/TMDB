@@ -1,6 +1,7 @@
 package com.tmdb.privalia.tmdb.interactor.services.interfaces;
 
 import com.tmdb.privalia.tmdb.interactor.model.Configuration;
+import com.tmdb.privalia.tmdb.interactor.model.PageKeywords;
 import com.tmdb.privalia.tmdb.interactor.model.PageMovies;
 
 import retrofit2.Call;
@@ -15,9 +16,15 @@ import retrofit2.http.Query;
 public interface tmdbAPI {
     @Headers("Content-Type: application/json;charset=utf-8")
     @GET("movie/popular")
-    Call<PageMovies> getPopularMovies(@Query("page") Integer page);
+    Call<PageMovies> getPopularMovies(@Query("page") Integer _page);
 
     @GET("configuration")
     Call<Configuration> getConfiguration();
+
+    @GET("search/movie")
+    Call<PageMovies> searchMovies(@Query("page") int _page, @Query("query") String _query);
+
+    @GET("search/keyword")
+    Call<PageKeywords> getKeywords(@Query("query") String _query);
 
 }
