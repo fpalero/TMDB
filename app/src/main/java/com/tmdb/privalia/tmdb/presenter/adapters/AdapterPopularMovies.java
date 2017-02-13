@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tmdb.privalia.tmdb.R;
+import com.tmdb.privalia.tmdb.interactor.model.Keyword;
 import com.tmdb.privalia.tmdb.interactor.model.Movie;
 import com.tmdb.privalia.tmdb.presenter.adapters.view_holder.MovieHolder;
 //import com.tmdb.privalia.tmdb.view.fragment.FragmentPopularMovies.OnListFragmentInteractionListener;
@@ -60,4 +61,5 @@ public class AdapterPopularMovies extends RecyclerView.Adapter<MovieHolder> {
         notifyDataSetChanged();
 
     }
+
 }

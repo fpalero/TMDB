@@ -3,4 +3,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="keyword_prompt">Choose a keyword</string>
+    <string name="keyword_check">Use keywords search</string>
 </resources>

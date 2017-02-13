@@ -1,19 +1,10 @@
 package com.tmdb.privalia.tmdb.presenter;
 
-import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
 import com.tmdb.privalia.tmdb.ApplicationTMDB;
-import com.tmdb.privalia.tmdb.R;
 import com.tmdb.privalia.tmdb.interactor.ConfigurationInteractor;
-import com.tmdb.privalia.tmdb.interactor.PageMovieInteractor;
 import com.tmdb.privalia.tmdb.interactor.interfaces.AInteractor;
 import com.tmdb.privalia.tmdb.interactor.model.Configuration;
-import com.tmdb.privalia.tmdb.interactor.model.PageMovies;
-import com.tmdb.privalia.tmdb.presenter.adapters.KeywordAdapter;
 import com.tmdb.privalia.tmdb.presenter.interfaces.ILoadConfiguration;
-import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
 
 /**
  * Created by fernando on 2/11/17.

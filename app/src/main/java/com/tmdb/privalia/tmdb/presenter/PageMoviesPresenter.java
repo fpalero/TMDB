@@ -4,7 +4,7 @@ import com.tmdb.privalia.tmdb.interactor.PageMovieInteractor;
 import com.tmdb.privalia.tmdb.interactor.interfaces.AInteractor;
 import com.tmdb.privalia.tmdb.interactor.model.PageMovies;
 import com.tmdb.privalia.tmdb.presenter.adapters.AdapterPopularMovies;
-import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
+import com.tmdb.privalia.tmdb.view.interfaces.InterfaceMovies;
 
 
 /**
@@ -12,12 +12,12 @@ import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
  */
 
 public class PageMoviesPresenter {
-    private IListPopularMovies iListPopularMovies;
+    private InterfaceMovies iListPopularMovies;
     private PageMovieInteractor pageMoviesInteractor;
 
     private AInteractor.InteractorResponse iResponse;
 
-    public PageMoviesPresenter(IListPopularMovies _iListPopularMovies) {
+    public PageMoviesPresenter(InterfaceMovies _iListPopularMovies) {
         this.iListPopularMovies = _iListPopularMovies;
         this.pageMoviesInteractor = new PageMovieInteractor();
 

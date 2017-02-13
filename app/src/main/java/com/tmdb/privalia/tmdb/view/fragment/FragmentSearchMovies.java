@@ -13,9 +13,9 @@ import com.tmdb.privalia.tmdb.R;
 import com.tmdb.privalia.tmdb.presenter.SearchMoviesPresenter;
 import com.tmdb.privalia.tmdb.presenter.adapters.AdapterPopularMovies;
 import com.tmdb.privalia.tmdb.presenter.adapters.EndlessScrollListener;
-import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
+import com.tmdb.privalia.tmdb.view.interfaces.InterfaceMovies;
 
-public class FragmentSearchMovies extends Fragment implements IListPopularMovies {
+public class FragmentSearchMovies extends Fragment implements InterfaceMovies {
 
     // TODO: Customize parameter argument names
     private static final String FIRST_VISIBLE_ITEM = "first visible element";
@@ -32,9 +32,12 @@ public class FragmentSearchMovies extends Fragment implements IListPopularMovies
     public EndlessScrollListener endlessScrollListener = new EndlessScrollListener() {
         @Override
         public void onLoadMore(int page, int totalItemsCount) {
-            searchMoviesPresenter.updateAdapter(page, query);
+
+            searchMoviesPresenter.updateAdapter(page, isKeywordsChecked);
+
         }
     };
+    private boolean isKeywordsChecked;
 
     public static FragmentSearchMovies newInstance() {
         FragmentSearchMovies fragment = new FragmentSearchMovies();
@@ -76,14 +79,14 @@ public class FragmentSearchMovies extends Fragment implements IListPopularMovies
 
 
                 this.searchMoviesPresenter = new SearchMoviesPresenter(this);
-               // this.pageMoviesPresenter.updateAdapter(1);
+                // this.pageMoviesPresenter.updateAdapter(1);
 
             } else {
 
                 recyclerView.setAdapter(adapterPopularMovies);
 
                 adapterPopularMovies.notifyDataSetChanged();
-                recyclerView.scrollToPosition(savedInstanceState.getInt(FIRST_VISIBLE_ITEM,0));
+                recyclerView.scrollToPosition(savedInstanceState.getInt(FIRST_VISIBLE_ITEM, 0));
 
             }
 
@@ -92,16 +95,6 @@ public class FragmentSearchMovies extends Fragment implements IListPopularMovies
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        /*if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }*/
-    }
 
     @Override
     public void onDetach() {
@@ -130,8 +123,10 @@ public class FragmentSearchMovies extends Fragment implements IListPopularMovies
         outState.putInt(FIRST_VISIBLE_ITEM, endlessScrollListener.getFirstVisibleItem());
     }
 
-    public void makeQuery(String _query){
-        searchMoviesPresenter.resetAdapter(1, _query);
+    public void makeQuery(String _query, boolean _isKeywordsChecked) {
+        isKeywordsChecked = _isKeywordsChecked;
+        searchMoviesPresenter.resetAdapter(1, _query, isKeywordsChecked);
+
     }
 
 }

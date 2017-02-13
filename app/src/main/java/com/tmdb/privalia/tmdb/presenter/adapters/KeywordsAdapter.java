@@ -29,8 +29,6 @@ public class KeywordsAdapter extends ArrayAdapter<Keyword> implements Filterable
     }
 
 
-
-
     @Override
     public long getItemId(int position) {
         return position;
@@ -77,7 +75,10 @@ public class KeywordsAdapter extends ArrayAdapter<Keyword> implements Filterable
                 } else {
                     notifyDataSetInvalidated();
                 }
-            }};
+            }
+        };
         return filter;
     }
+
+
 }

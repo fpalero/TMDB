@@ -28,7 +28,7 @@
 
     <integer name="num_columns">1</integer>
 
-    <dimen name="dropdown_width">100dp</dimen>
+    <dimen name="dropdown_width">200dp</dimen>
     <dimen name="search_view_width">300dp</dimen>
     <dimen name="search_view_min_width">180dp</dimen>
     <dimen name="search_view_height">35dp</dimen>

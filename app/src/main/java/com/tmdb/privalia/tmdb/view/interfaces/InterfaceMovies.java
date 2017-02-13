@@ -7,7 +7,7 @@ import android.widget.Adapter;
  * Created by fernando on 2/10/17.
  */
 
-public interface IListPopularMovies {
+public interface InterfaceMovies {
 
     void setListAdapter(RecyclerView.Adapter adapter);
     RecyclerView.Adapter getListAdapter();

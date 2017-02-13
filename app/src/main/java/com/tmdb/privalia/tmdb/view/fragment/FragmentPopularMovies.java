@@ -13,9 +13,9 @@ import com.tmdb.privalia.tmdb.R;
 import com.tmdb.privalia.tmdb.presenter.PageMoviesPresenter;
 import com.tmdb.privalia.tmdb.presenter.adapters.AdapterPopularMovies;
 import com.tmdb.privalia.tmdb.presenter.adapters.EndlessScrollListener;
-import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
+import com.tmdb.privalia.tmdb.view.interfaces.InterfaceMovies;
 
-public class FragmentPopularMovies extends Fragment implements IListPopularMovies {
+public class FragmentPopularMovies extends Fragment implements InterfaceMovies {
 
     // TODO: Customize parameter argument names
     private static final String FIRST_VISIBLE_ITEM = "first visible element";

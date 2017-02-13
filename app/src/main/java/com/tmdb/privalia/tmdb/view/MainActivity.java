@@ -1,24 +1,28 @@
 package com.tmdb.privalia.tmdb.view;
 
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.tmdb.privalia.tmdb.R;
 import com.tmdb.privalia.tmdb.interactor.model.Keyword;
-import com.tmdb.privalia.tmdb.presenter.KeywordsPresenter;
-import com.tmdb.privalia.tmdb.presenter.LoadInitDataPresenter;
-import com.tmdb.privalia.tmdb.presenter.adapters.KeywordAdapter;
 import com.tmdb.privalia.tmdb.presenter.adapters.KeywordsAdapter;
 import com.tmdb.privalia.tmdb.presenter.interfaces.ILoadKeywords;
 import com.tmdb.privalia.tmdb.view.fragment.FragmentInit;
@@ -27,28 +31,35 @@ import com.tmdb.privalia.tmdb.view.fragment.FragmentSearchMovies;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements FragmentInit.OnFragmentInteractionListener, ILoadKeywords<Keyword> /*, SearchView.OnQueryTextListener */{
-    private boolean expandable = true;
-  //  private SearchView searchView;
-    private LoadInitDataPresenter loadInitDataPresenter;
-    private KeywordsPresenter keywordsPresenter;
-    private AppBarLayout appBarLayout;
-    private FloatingActionButton fabSearch;
+public class MainActivity extends AppCompatActivity implements FragmentInit.OnFragmentInteractionListener, ILoadKeywords<Keyword>/*, SearchView.OnQueryTextListener */ {
     private FragmentSearchMovies fragmentSearchMovies = null;
-    private View.OnClickListener fabListener = new View.OnClickListener() {
+    private ImageButton searchButton;
+    private LinearLayout searchLayout;
+    private Toolbar myToolbar;
+    private boolean isKeywordsChecked = false;
+    private boolean searchOn = false;
+    private String TAG_FRAGMENT_SEARCH = "SearchFragment";
+    Spinner spinner;
+    CheckBox checkBoxKeyords;
+    private View.OnClickListener searchListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
-            appBarLayout.setExpanded(expandable);
-            expandable=!expandable;
-            fragmentSearchMovies = FragmentSearchMovies.newInstance();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            if(!searchOn) {
+                searchOn = true;
+
+                searchLayout.setVisibility(View.VISIBLE);
+                editQuery.setFocusable(true);
+
+                fragmentSearchMovies = FragmentSearchMovies.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 
-            fragmentTransaction.replace(R.id.container_main, fragmentSearchMovies);
-            fragmentTransaction.addToBackStack("SearchFragment");
-            fragmentTransaction.commit();
+                fragmentTransaction.replace(R.id.container_main, fragmentSearchMovies, TAG_FRAGMENT_SEARCH);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
 
         }
     };
@@ -61,12 +72,53 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-           // keywordsPresenter.updateAdapter(charSequence.toString());
-            fragmentSearchMovies.makeQuery(charSequence.toString());
+            // keywordsPresenter.updateAdapter(charSequence.toString());
+            if (fragmentSearchMovies != null) {
+                String query = charSequence.toString();
+                if (!isKeywordsChecked)
+                    fragmentSearchMovies.makeQuery(query, isKeywordsChecked);
+            }
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
+
+        }
+    };
+
+    CompoundButton.OnCheckedChangeListener checkListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            isKeywordsChecked = b;
+            if(isKeywordsChecked)
+                spinner.setVisibility(View.VISIBLE);
+            else
+                spinner.setVisibility(View.GONE);
+        }
+    };
+
+    AdapterView.OnItemClickListener autoSeletItem = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            if (isKeywordsChecked) {
+                spinner.setSelection(i);
+
+            }
+        }
+    };
+
+    AdapterView.OnItemSelectedListener spinnerSelectItem = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            if (isKeywordsChecked) {
+                String query = autoCompleteAdapter.getItem(i).getId()+"";
+                fragmentSearchMovies.makeQuery(query, isKeywordsChecked);
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
 
         }
     };
@@ -77,49 +129,68 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.expandable_layout);
+        setContentView(R.layout.activity_main);
 
-        fabSearch = ( FloatingActionButton)findViewById(R.id.fab_search);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbarlayout);
-        appBarLayout.setVisibility(View.GONE);
+        myToolbar = (Toolbar) findViewById(R.id.tmdb_toolbar);
 
-        editQuery = (AutoCompleteTextView) findViewById(R.id.edittext_query);
+
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.toolobar);
+        getSupportActionBar().hide();
+
+        searchButton = (ImageButton) getSupportActionBar().getCustomView().findViewById(R.id.search_button);
+
+        searchButton.setOnClickListener(searchListener);
 
         autoCompleteAdapter = new KeywordsAdapter(this,
                 new ArrayList<Keyword>());
 
+
+        checkBoxKeyords = (CheckBox) getSupportActionBar().getCustomView().findViewById(R.id.checkbox_keywords);
+        checkBoxKeyords.setOnCheckedChangeListener(checkListener);
+
+
+        searchLayout = (LinearLayout) getSupportActionBar().getCustomView().findViewById(R.id.search_layout);
+
+
+
+        editQuery = (AutoCompleteTextView) getSupportActionBar().getCustomView().findViewById(R.id.edittext_query);
+
         editQuery.setAdapter(autoCompleteAdapter);
 
         editQuery.addTextChangedListener(textWatcher);
+        editQuery.setOnItemClickListener(autoSeletItem);
+        autoCompleteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        fabSearch.setVisibility(View.GONE);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.tmdb_toolbar);
+        spinner = (Spinner) getSupportActionBar().getCustomView().findViewById(R.id.spinner_keywords);
+        spinner.setAdapter(autoCompleteAdapter);
 
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().collapseActionView();
-
-        keywordsPresenter = new KeywordsPresenter(this);
-
+        spinner.setOnItemSelectedListener(spinnerSelectItem);
 
         boolean showLoading = true;
         if (savedInstanceState != null) {
             showLoading = savedInstanceState.getBoolean(SHOW_LOADING, true);
+            searchOn = savedInstanceState.getBoolean(SEARCH_ON, true);
 
         }
 
+        getSupportActionBar().show();
         if (showLoading) {
+            getSupportActionBar().hide();
             changeFrament(FragmentInit.newInstance());
-        } else {
-            loadInitDataPresenter = new LoadInitDataPresenter(null);
-            appBarLayout.setVisibility(View.VISIBLE);
-            fabSearch.setVisibility(View.VISIBLE);
-            getSupportActionBar().show();
-
         }
 
-        fabSearch.setOnClickListener(fabListener);
+        if(searchOn)
+            searchLayout.setVisibility(View.VISIBLE);
+        else
+            searchLayout.setVisibility(View.GONE);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment f = fragmentManager.findFragmentByTag(TAG_FRAGMENT_SEARCH);
+        if(f != null)
+            fragmentSearchMovies = (FragmentSearchMovies) f;
     }
 
     private void changeFrament(Fragment _fragment) {
@@ -132,21 +203,19 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
     }
 
     private String SHOW_LOADING = "showLoading";
-
+    private String SEARCH_ON = "seaarchOn";
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SHOW_LOADING, false);
+        outState.putBoolean(SEARCH_ON, searchOn);
     }
 
     @Override
     public void onFragmentInteraction(ArrayList<String> _keywords) {
-        ArrayAdapter<String> dataAdapter = new KeywordAdapter(this,
-                _keywords);
-        dataAdapter.setDropDownViewResource(R.layout.dropdown_keyword_item);
-        appBarLayout.setVisibility(View.VISIBLE);
-        fabSearch.setVisibility(View.VISIBLE);
+
         changeFrament(FragmentPopularMovies.newInstance());
+        getSupportActionBar().show();
     }
 
     @Override
@@ -155,39 +224,13 @@ public class MainActivity extends AppCompatActivity implements FragmentInit.OnFr
     }
 
 
-    /////////////////////////////
-    // SEARCHABLE CODE
-
- /*   @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        super.onCreateOptionsMenu(menu);
-
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        MenuItem searchItem = menu.findItem(R.id.context_search);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName())
-        );
-
-
-        searchView.setQueryHint("Search Movie");
-        searchView.setMaxWidth((int) getApplicationContext().getResources().getDimension(R.dimen.search_view_width));
-        searchView.setIconifiedByDefault(true);
-        searchView.setOnQueryTextListener(this);
-        return true;
-    }
-
     @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
+    public void onBackPressed() {
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }*/
+        searchLayout.setVisibility(View.INVISIBLE);
+        editQuery.setText("");
+        searchOn = false;
+        super.onBackPressed();
+
+    }
 }

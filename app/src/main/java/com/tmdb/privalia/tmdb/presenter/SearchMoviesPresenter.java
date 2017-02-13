@@ -4,7 +4,7 @@ import com.tmdb.privalia.tmdb.interactor.SearchMovieInteractor;
 import com.tmdb.privalia.tmdb.interactor.interfaces.AInteractor;
 import com.tmdb.privalia.tmdb.interactor.model.PageMovies;
 import com.tmdb.privalia.tmdb.presenter.adapters.AdapterPopularMovies;
-import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
+import com.tmdb.privalia.tmdb.view.interfaces.InterfaceMovies;
 
 
 /**
@@ -12,15 +12,17 @@ import com.tmdb.privalia.tmdb.view.interfaces.IListPopularMovies;
  */
 
 public class SearchMoviesPresenter {
-    private IListPopularMovies iListPopularMovies;
+    private InterfaceMovies iSearchovies;
     private SearchMovieInteractor searchMoviesInteractor;
-
+    private String query;
+    private int id_keyword;
     private AInteractor.InteractorResponse iResponse;
     private AInteractor.InteractorResponse iResponseNewSearch;
     private int total_page = 1;
+    boolean useKeywords = false;
 
-    public SearchMoviesPresenter(IListPopularMovies _iListPopularMovies) {
-        this.iListPopularMovies = _iListPopularMovies;
+    public SearchMoviesPresenter(InterfaceMovies _iListPopularMovies) {
+        this.iSearchovies = _iListPopularMovies;
         this.searchMoviesInteractor = new SearchMovieInteractor();
 
 
@@ -28,6 +30,7 @@ public class SearchMoviesPresenter {
             @Override
             public void success(PageMovies _pageMovies) {
                 total_page = _pageMovies.total_pages;
+
                 updateMoviesList(_pageMovies);
             }
 
@@ -51,26 +54,58 @@ public class SearchMoviesPresenter {
         };
     }
 
-    public void updateAdapter(int _page, String _query) {
+    public void updateAdapter(int _page, boolean _useKeywords) {
+        this.useKeywords = _useKeywords;
+        if (!_useKeywords)
+            updateAdapter(_page);
+        else
+            updateAdapterKeywords(_page);
+    }
+
+    public void resetAdapter(int _page, String _query, boolean _useKeywords) {
+        this.useKeywords = _useKeywords;
+        if (!_useKeywords)
+            resetAdapter(_page, _query);
+        else
+            resetAdapterKeywords(_page, _query);
+
+    }
+
+    public void updateAdapter(int _page) {
         if (_page <= total_page) {
-            this.searchMoviesInteractor.cancelSearch();
-            this.searchMoviesInteractor.getSearch(_page, _query, iResponse);
+            this.searchMoviesInteractor.getSearch(_page, this.query, iResponse);
         }
     }
 
     public void resetAdapter(int _page, String _query) {
         total_page = 1;
+        this.query = _query;
         this.searchMoviesInteractor.cancelSearch();
-        this.searchMoviesInteractor.getSearch(_page, _query, iResponseNewSearch);
+        this.searchMoviesInteractor.getSearch(_page, query, iResponseNewSearch);
+
+    }
+
+    public void updateAdapterKeywords(int _page) {
+        if (_page <= total_page) {
+            this.searchMoviesInteractor.getSearchKeywords(_page, id_keyword, iResponse);
+        }
+    }
+
+    public void resetAdapterKeywords(int _page, String _query) {
+        total_page = 1;
+        this.id_keyword = Integer.parseInt(_query);
+        this.searchMoviesInteractor.cancelSearch();
+        this.searchMoviesInteractor.getSearchKeywords(_page, id_keyword, iResponseNewSearch);
 
     }
 
     private void updateMoviesList(PageMovies _pageMovies) {
-        ((AdapterPopularMovies) iListPopularMovies.getListAdapter()).updateListMovies(_pageMovies.getListMovies());
+        ((AdapterPopularMovies) iSearchovies.getListAdapter()).updateListMovies(_pageMovies.getListMovies());
     }
 
     private void resetMoviesList(PageMovies _pageMovies) {
-        ((AdapterPopularMovies) iListPopularMovies.getListAdapter()).resetListMovies(_pageMovies.getListMovies());
+        ((AdapterPopularMovies) iSearchovies.getListAdapter()).resetListMovies(_pageMovies.getListMovies());
+        iSearchovies.getRecyclerView().smoothScrollToPosition(0);
     }
 
 
